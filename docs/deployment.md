@@ -17,8 +17,8 @@
 
 2. 克隆项目并安装依赖：
    ```bash
-   git clone https://github.com/yourusername/link-to-image.git
-   cd link-to-image
+   git clone https://github.com/guixian001/link2qr.git
+   cd link2qr
    npm install
    ```
 
@@ -53,8 +53,8 @@
 
 2. 克隆项目并安装依赖：
    ```bash
-   git clone https://github.com/yourusername/link-to-image.git
-   cd link-to-image
+   git clone https://github.com/guixian001/link2qr.git
+   cd link2qr
    npm install
    ```
 
@@ -93,12 +93,12 @@
 
 2. 构建 Docker 镜像：
    ```bash
-   docker build -t link-to-image .
+   docker build -t link2qr .
    ```
 
 3. 运行容器：
    ```bash
-   docker run -d -p 3000:3000 link-to-image
+   docker run -d -p 3000:3000 link2qr
    ```
 
 4. 访问 http://localhost:3000 查看应用

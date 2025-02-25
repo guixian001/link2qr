@@ -34,10 +34,10 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/yourusername/link-to-image.git
+git clone https://github.com/guixian001/link2qr.git
 
 # 进入项目目录
-cd link-to-image
+cd link2qr
 
 # 安装依赖
 npm install

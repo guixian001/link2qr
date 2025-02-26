@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import axios from 'axios';
+import Image from 'next/image';
 
 // Toast 组件
 const Toast = ({ message, onClose }: { message: string; onClose: () => void }) => {
@@ -24,16 +25,15 @@ export default function Home() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
-  const [metadata, setMetadata] = useState({ title: '', description: '' });
   const [customMetadata, setCustomMetadata] = useState({ title: '', description: '' });
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [urlError, setUrlError] = useState('');
   const [toastMessage, setToastMessage] = useState('');
-  const [toastKey, setToastKey] = useState(0); // 添加 toastKey 状态用于强制重新渲染 Toast
+  const [toastKey, setToastKey] = useState(0);
 
   const showToast = (message: string) => {
     setToastMessage(message);
-    setToastKey(prev => prev + 1); // 更新 toastKey 触发重新渲染
+    setToastKey(prev => prev + 1);
   };
 
   const validateUrl = (input: string) => {
@@ -53,7 +53,7 @@ export default function Home() {
       setUrlError('');
       setUrl(processedUrl);
       return true;
-    } catch (e) {
+    } catch {
       setUrlError('请输入有效的网址');
       return false;
     }
@@ -73,7 +73,7 @@ export default function Home() {
       // 获取网站元数据
       const response = await axios.get(`/api/metadata?url=${encodeURIComponent(url)}`);
       const { title, description } = response.data;
-      setMetadata({ title, description });
+      setCustomMetadata({ title, description });
 
       // 创建 Canvas
       const canvas = document.createElement('canvas');
@@ -118,16 +118,12 @@ export default function Home() {
 
       // 生成并绘制二维码
       const qrCodeDataUrl = await QRCode.toDataURL(url, {
-        width: 400,  // 提高二维码分辨率
         margin: 0,
-        color: {
-          dark: '#000000',
-          light: '#ffffff'
-        },
-        quality: 1  // 最高质量
+        scale: 8,
+        width: 140
       });
 
-      const qrImage = new Image();
+      const qrImage = document.createElement('img');
       await new Promise((resolve, reject) => {
         qrImage.onload = resolve;
         qrImage.onerror = reject;
@@ -197,7 +193,7 @@ export default function Home() {
             />
             <button
               onClick={generateImage}
-              disabled={loading || !url || urlError}
+              disabled={loading || !url || Boolean(urlError)}
               className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? '生成中...' : '生成'}
@@ -259,9 +255,11 @@ export default function Home() {
         {previewImage && (
           <div className="bg-white shadow rounded-lg p-6">
             <div className="bg-gray-100 rounded-lg p-4 overflow-hidden">
-              <img
+              <Image
                 src={previewImage}
                 alt="Preview"
+                width={600}
+                height={200}
                 className="w-full h-auto"
               />
             </div>
